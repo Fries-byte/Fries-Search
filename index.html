@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fries-Search</title>
+</head>
+<body>
+    <center><h1 style="font-size: 50px;">Fries-Search</h1></center>
+    <center><h2 style="font-size: 20px;">A Search Engine to Put Your Website on Here!</h2></center>
+    <center><h2 style="font-size: 15px;">No complicated CSS for low-end devices!</h2></center>
+    <br>
+    <center><input type="text" id="searchbar" autocomplete="off"></center>
+    <br>
+    <center><button id="searchbutton" onclick="performSearch()" type="submit">Search</button></center>
+    <br>
+    <div id="results" style="margin-top: 20px;"></div> <!-- Placeholder for search results -->
+    <br>
+    <br>
+    <center><button><a style="color: black; text-decoration: none;" href="https://github.com/Fries-byte/Fries-Search/issues/new">Create/Add a Website</a></button></center>
+    <br>
+    <center><strong>(GitHub) Fries-Byte</strong></center>
+    <center><strong>"Publishing a website is not free" -Fries</strong></center>
+
+    <script>
+      function performSearch() {
+        const query = document.getElementById('searchbar').value.trim(); // Removes leading/trailing spaces
+        if (query) {
+          // Redirect to search.html with the query parameter
+          window.location.href = `search.html?query=${encodeURIComponent(query)}`;
+        }
+      }
+    </script>
+</body>
+</html>

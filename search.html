@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Fries-Search</h1>
+    <h3>Miss typed? Heres a search bar!</h3>
+    <input type="text" id="searchbar" autocomplete="off" type="search">
+    <strong>ㅤ</strong>
+    <button id="searchbutton" type="submit" onclick="performSearch()">Search</button>
+    <br>
+    <br>
+    <br>
+    <div id="results"></div> <!-- Placeholder for search results -->
+    <div id="pagination"></div> <!-- Placeholder for pagination -->
+
+    <script>
+    // Predefined list of websites with titles, URLs, and descriptions
+    const websites = [
+        { name: "Fries's Basic Calculator", url: "https://fries-byte.github.io/Fries-s-Basic-Calculator/", description: "a basic calculator i made because i was bored" },
+        { name: "&Fries=14", url: "https://example2.com", description: "A udm=14 copy made by Fries" },
+        { name: "GitHub", url: "https://GitHub.com", description: "GitHub is where over 100 million developers shape the future of software, together. Contribute to the open source community, manage your Git repositories and more!" }
+    ];
+
+    const RESULTS_PER_PAGE = 10;
+
+    function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    function getPageNumber() {
+        const pageParam = getQueryParameter("page");
+        return pageParam ? parseInt(pageParam, 10) : 1;
+    }
+
+    function displayResults() {
+        const query = getQueryParameter("query") || "";  // Handles undefined case
+        const pageNumber = getPageNumber();
+        const startIndex = (pageNumber - 1) * RESULTS_PER_PAGE;
+        const endIndex = startIndex + RESULTS_PER_PAGE;
+
+        // Filter websites based on query
+        const filteredResults = websites.filter(site => site.name.toLowerCase().includes(query.toLowerCase()));
+        const resultsToShow = filteredResults.slice(startIndex, endIndex);
+
+        const resultsDiv = document.getElementById('results');
+        const paginationDiv = document.getElementById('pagination');
+
+        // Clear previous results
+        resultsDiv.innerHTML = '';
+
+        if (resultsToShow.length > 0) {
+          resultsToShow.forEach(site => {
+            const resultItem = document.createElement('div');
+            resultItem.innerHTML = `
+              <div>
+                <a href="${site.url}" style="font-size: 20px; color: blue;">${site.name}</a><br>
+                <a href="${site.url}">${site.url}</a><br>
+                <p>${site.description}</p>
+              </div>
+              <hr>
+            `;
+            resultsDiv.appendChild(resultItem);
+          });
+
+          // Pagination controls
+          const totalPages = Math.ceil(filteredResults.length / RESULTS_PER_PAGE);
+          let paginationHtml = '';
+
+          if (pageNumber > 1) {
+            paginationHtml += `<a href="search.html?query=${encodeURIComponent(query)}&page=${pageNumber - 1}">Previous</a> `;
+          }
+
+          for (let i = 1; i <= totalPages; i++) {
+            if (i === pageNumber) {
+              paginationHtml += `<strong>${i}</strong> `;
+            } else {
+              paginationHtml += `<a href="search.html?query=${encodeURIComponent(query)}&page=${i}">${i}</a> `;
+            }
+          }
+
+          if (pageNumber < totalPages) {
+            paginationHtml += `<a href="search.html?query=${encodeURIComponent(query)}&page=${pageNumber + 1}">Next</a>`;
+          }
+
+          paginationDiv.innerHTML = paginationHtml;
+        } else {
+          resultsDiv.innerHTML = 'No Results Found';
+          paginationDiv.innerHTML = '';
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', displayResults);
+
+    function performSearch() {
+        const query = document.getElementById('searchbar').value.trim();
+        if (query) {
+          // Redirect to search.html with the query parameter
+          window.location.href = `search.html?query=${encodeURIComponent(query)}`;
+        }
+    }
+    </script>
+
+</body>
+</html>
